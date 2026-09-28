@@ -1,5 +1,9 @@
 public class Buscaminas {
     
+    static int numAleatorio(int[] rango) {
+        return (int)(Math.random() * (rango[1] - rango[0]) + 1) + rango[0];
+    }
+
     static void mostrarArray(int[][] array) {
 
         for (int i = 0; i < array.length; i++) {
@@ -14,19 +18,32 @@ public class Buscaminas {
     static void llenarArray(int[][] array) {
         int[] rangoPorcentaje = {12, 21};
         int cantCasillas = array.length * array[0].length; 
-        int porcentaje = (int)(Math.random() * (rangoPorcentaje[1] - rangoPorcentaje[0]) + 1) + rangoPorcentaje[0];
+        int porcentaje = numAleatorio(rangoPorcentaje);
         int cantBombas = (int)(cantCasillas * (porcentaje / 100.));
+        int cantBombPuestas = 0;
         
         System.out.println(porcentaje);
         System.out.println(cantCasillas);
         System.out.println(cantBombas);
 
-        for (int i = 0; i < array.length; i++) {
-            for (int j = 0; j < array[i].length; j++) {
-                
-                array[i][j] = j;  
+        while (cantBombPuestas < cantBombas) {
+            int cordY = numAleatorio([0, array.length - 1]);
+            int cordX = numAleatorio([0, array[0].length - 1]);
+
+            for (int i = 0; i < array.length; i++) {
+                for (int j = 0; j < array[i].length; j++) {
+                    
+                    if (i == cordY && j == cordX) {
+                        if (array[i][j] != 1) {
+                            array[i][j] = 1;
+                            cantBombPuestas += 1;
+                        }
+                    } else {
+                        array[i][j] = 0;
+                    }
+                }
             }
-        }
+        }      
     } 
 
     public static void main(String[] args) {
