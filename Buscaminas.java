@@ -5,20 +5,31 @@ public class Buscaminas {
     }
 
     static void mostrarArray(String[][] array) {
+        int numMax_Y = array.length;
+        int numMax_X = array[0].length;
 
-        for (int i = 0; i < array.length; i++) {
+        System.out.print(" ".repeat(Integer.toString(numMax_Y).length() + 1));
+        for (int i = 0; i < numMax_X; i++) {
 
-            int indice = i + 1;
-            System.out.printf("%s", indice);
-            for (int j = 0; j < (((String)indice)).length; j++) {
-                System.out.print(" ");
-            }
-
-            for (int j = 0; j < array[i].length; j++) {
-                System.out.printf("%s", array[i][j]);
-            }
-            System.out.print("\n"); 
+            int digitosMax_X = Integer.toString(numMax_X).length();
+            System.out.printf("%d%s", i+1, " ".repeat(Math.max(((digitosMax_X > 1) ? digitosMax_X + 1 : digitosMax_X + 2) - (Integer.toString(i+1).length()), 1)));
         }
+        System.out.print(" (x)\n\n");
+        int spaceBetw_X = Math.max(Integer.toString(numMax_X).length() - 1, 1);
+
+        for (int i = 0; i < numMax_Y; i++) {
+
+            System.out.printf("%d%s", i+1, " ".repeat(Integer.toString(numMax_Y).length() + 1 - (Integer.toString(i+1).length())));
+
+            for (int j = 0; j < numMax_X; j++) {
+                System.out.printf("%s%s", array[i][j], " ".repeat(spaceBetw_X));
+            }
+
+            if (i < numMax_Y - 1) {
+                System.out.print("\n".repeat(spaceBetw_X + 1)); 
+            }
+        }
+        System.out.print("\n\n(y)");
     }
 
     static void llenarArraySolucion(int[][] array) {
@@ -46,7 +57,7 @@ public class Buscaminas {
     public static void main(String[] args) {
 
         int sizeY = 10;
-        int sizeX = 10;
+        int sizeX = 9;
         int[][] arraySolucion = new int[sizeY][sizeX];
         String[][] arrayVisible = new String[sizeY][sizeX]; 
 
