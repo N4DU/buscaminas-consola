@@ -1,3 +1,6 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
 public class Buscaminas {
     
     static int numAleatorio(int[] rango) {
@@ -29,7 +32,7 @@ public class Buscaminas {
                 System.out.print("\n".repeat(spaceBetw_X + 1)); 
             }
         }
-        System.out.print("\n\n(y)");
+        System.out.print("\n\n(y)\n");
     }
 
     static void llenarArraySolucion(int[][] array) {
@@ -54,10 +57,41 @@ public class Buscaminas {
         }      
     } 
 
+    static int[] pedirCoordenadas(Scanner sc) {
+        System.out.print("\n\n(x) (y) si/no:\n");
+        String resp = sc.nextLine().toLowerCase();
+        String respNum = "";
+        int[] nums = new int[2];
+        int numCount = 0;
+
+        for (int i = 0; i < resp.length(); i++) {
+            char c = resp.charAt(i);
+
+            if (Character.isDigit(c)) {
+                respNum += c;
+            } else if (!respNum.isEmpty()) {
+                nums[numCount] = Integer.parseInt(respNum);
+                numCount++;
+                respNum = "";
+                if (numCount == 2) break;
+            }
+        }
+
+        // Por si termina en digitos
+        if (!respNum.isEmpty() && numCount < 2) {
+            nums[numCount] = Integer.parseInt(respNum);
+        }
+
+        int siNo = resp.contains("si") ? 1 : 0;
+
+        return new int[]{nums[0], nums[1], siNo};
+    }
+
     public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
 
         int sizeY = 10;
-        int sizeX = 9;
+        int sizeX = 10;
         int[][] arraySolucion = new int[sizeY][sizeX];
         String[][] arrayVisible = new String[sizeY][sizeX]; 
 
@@ -68,5 +102,7 @@ public class Buscaminas {
         }
         llenarArraySolucion(arraySolucion);
         mostrarArray(arrayVisible);
+
+        System.out.print(Arrays.toString(pedirCoordenadas(sc)));
     }
 }
