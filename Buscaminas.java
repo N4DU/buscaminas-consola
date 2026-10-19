@@ -87,6 +87,35 @@ public class Buscaminas {
         return new int[]{nums[0], nums[1], siNo};
     }
 
+    static int CantBombasAlrededor(int[][] arraySolucion, int[] coordenada) {
+        int bombasTotal = 0;
+        int[] cordRevisar = {-1, 0, 1};
+        
+        for (int i = 0; i < 3; i++) {
+            for (int n : cordRevisar) {
+
+                int ejeY = coordenada[1] + n;
+                int ejeX = coordenada[0] + n;
+
+                if (arraySolucion[ejeY][ejeX] == 1) {
+                    bombasTotal += 1;
+                }
+            }   
+        }
+
+        return bombasTotal;
+    }
+
+    static void mostrarArraySolucion(int[][] array) {
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < array[0].length; j++) {
+
+                System.out.printf("%d ", array[i][j]);
+            }
+            System.out.print("\n");
+        }
+    }
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
@@ -101,8 +130,12 @@ public class Buscaminas {
             }
         }
         llenarArraySolucion(arraySolucion);
-        mostrarArray(arrayVisible);
 
-        System.out.print(Arrays.toString(pedirCoordenadas(sc)));
+        mostrarArray(arrayVisible);
+        System.out.print("\n\n");
+        mostrarArraySolucion(arraySolucion);
+        System.out.print("\n\n");
+
+        System.out.print(CantBombasAlrededor(arraySolucion, pedirCoordenadas(sc)));
     }
 }
