@@ -88,6 +88,11 @@ public class Buscaminas {
     }
 
     static int CantBombasAlrededor(int[][] arraySolucion, int[] coordenada) {
+
+        // Porq la coordenadas empiezan en 0, no en 1
+        coordenada[0] -= 1;
+        coordenada[1] -= 1;
+
         int bombasTotal = 0;
         int[] cordRevisar = {-1, 0, 1};
         
@@ -136,6 +141,7 @@ public class Buscaminas {
         mostrarArraySolucion(arraySolucion);
         System.out.print("\n\n");
 
-        System.out.print(CantBombasAlrededor(arraySolucion, pedirCoordenadas(sc)));
+        int[] coordSelec = pedirCoordenadas(sc);
+        System.out.print(CantBombasAlrededor(arraySolucion, coordSelec));
     }
 }
