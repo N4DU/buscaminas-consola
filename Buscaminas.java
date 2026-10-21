@@ -91,11 +91,11 @@ public class Buscaminas {
         int bombasTotal = 0;
         int[] cordRevisar = {-1, 0, 1};
         
-        for (int i = 0; i < 3; i++) {
-            for (int n : cordRevisar) {
+        for (int y : cordRevisar) {
+            for (int x : cordRevisar) {
 
-                int ejeY = coordenada[1] + n;
-                int ejeX = coordenada[0] + n;
+                int ejeY = coordenada[1] + y;
+                int ejeX = coordenada[0] + x;
 
                 if (arraySolucion[ejeY][ejeX] == 1) {
                     bombasTotal += 1;
