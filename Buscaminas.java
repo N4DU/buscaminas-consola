@@ -98,7 +98,7 @@ public class Buscaminas {
                 int ejeY = (coordenada[1] - 1) + y;
                 int ejeX = (coordenada[0] - 1) + x;
 
-                if (ejeY <= (arraySolucion.length - 1) && ejeX <= (arraySolucion[0].length - 1)) {
+                if ((ejeY < arraySolucion.length && ejeY >= 0) && (ejeX < arraySolucion[0].length && ejeX >= 0)) {
                     if (arraySolucion[ejeY][ejeX] == 1) {
                         bombasTotal += 1;
                     }
