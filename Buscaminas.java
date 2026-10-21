@@ -89,21 +89,19 @@ public class Buscaminas {
 
     static int CantBombasAlrededor(int[][] arraySolucion, int[] coordenada) {
 
-        // Porq la coordenadas empiezan en 0, no en 1
-        coordenada[0] -= 1;
-        coordenada[1] -= 1;
-
         int bombasTotal = 0;
         int[] cordRevisar = {-1, 0, 1};
         
         for (int y : cordRevisar) {
             for (int x : cordRevisar) {
 
-                int ejeY = coordenada[1] + y;
-                int ejeX = coordenada[0] + x;
+                int ejeY = (coordenada[1] - 1) + y;
+                int ejeX = (coordenada[0] - 1) + x;
 
-                if (arraySolucion[ejeY][ejeX] == 1) {
-                    bombasTotal += 1;
+                if (ejeY <= (arraySolucion.length - 1) && ejeX <= (arraySolucion[0].length - 1)) {
+                    if (arraySolucion[ejeY][ejeX] == 1) {
+                        bombasTotal += 1;
+                    }
                 }
             }   
         }
@@ -141,7 +139,17 @@ public class Buscaminas {
         mostrarArraySolucion(arraySolucion);
         System.out.print("\n\n");
 
-        int[] coordSelec = pedirCoordenadas(sc);
+        boolean rangoValido;
+        int[] coordSelec;
+        do {
+            coordSelec = pedirCoordenadas(sc);
+            rangoValido = (coordSelec[0] <= 0 || coordSelec[0] > sizeX) || (coordSelec[1] <= 0 || coordSelec[1] > sizeY);
+            if (rangoValido) {
+                System.out.println("Rango invalido\n");
+            }
+        } while (rangoValido);
+        
+        System.out.println(coordSelec[0] + "  " + coordSelec[1]);
         System.out.print(CantBombasAlrededor(arraySolucion, coordSelec));
     }
 }
