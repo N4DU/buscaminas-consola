@@ -109,6 +109,11 @@ public class Buscaminas {
         return bombasTotal;
     }
 
+    static void modificarArrayVisible(String[][] arrayVisible, int[] coordenada, int cantBombas) {
+
+        arrayVisible[coordenada[1] - 1][coordenada[0] - 1] =  cantBombas + " ";
+    }
+
     static void mostrarArraySolucion(int[][] array) {
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < array[0].length; j++) {
@@ -148,8 +153,8 @@ public class Buscaminas {
                 System.out.println("Rango invalido\n");
             }
         } while (rangoValido);
-        
-        System.out.println(coordSelec[0] + "  " + coordSelec[1]);
-        System.out.print(CantBombasAlrededor(arraySolucion, coordSelec));
+
+        modificarArrayVisible(arrayVisible, coordSelec, CantBombasAlrededor(arraySolucion, coordSelec));
+        mostrarArray(arrayVisible);
     }
 }
