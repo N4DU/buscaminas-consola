@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Buscaminas {
@@ -84,7 +83,7 @@ public class Buscaminas {
 
         int siNo = resp.contains("si") ? 1 : 0;
 
-        return new int[]{nums[0], nums[1], siNo};
+        return new int[]{nums[0] - 1, nums[1] - 1, siNo};
     }
 
     static int CantBombasAlrededor(int[][] arraySolucion, int[] coordenada) {
@@ -95,8 +94,8 @@ public class Buscaminas {
         for (int y : cordRevisar) {
             for (int x : cordRevisar) {
 
-                int ejeY = (coordenada[1] - 1) + y;
-                int ejeX = (coordenada[0] - 1) + x;
+                int ejeY = coordenada[1] + y;
+                int ejeX = coordenada[0] + x;
 
                 if ((ejeY < arraySolucion.length && ejeY >= 0) && (ejeX < arraySolucion[0].length && ejeX >= 0)) {
                     if (arraySolucion[ejeY][ejeX] == 1) {
@@ -109,9 +108,53 @@ public class Buscaminas {
         return bombasTotal;
     }
 
-    static void modificarArrayVisible(String[][] arrayVisible, int[] coordenada, int cantBombas) {
+    static void limpiarAlrededor(String[][] arrayVisible, int[][] arraySolucion, int[] coordSelec) {
+        int cordX = coordSelec[0];
+        int cordY = coordSelec[1];
+        int[] mover = {-1, 1};
+        int bombas;
+        
+        arrayVisible[cordY][cordX] = "0 ";
 
-        arrayVisible[coordenada[1] - 1][coordenada[0] - 1] =  cantBombas + " ";
+        for (int m : mover) {
+            int newCordX = cordX + m;
+            if ((newCordX >= 0 && newCordX < arraySolucion[0].length) && arrayVisible[cordY][newCordX].equals("[]")) {
+                bombas = CantBombasAlrededor(arraySolucion, new int[] {newCordX, cordY});
+
+                if (bombas >= 1) {
+                    arrayVisible[cordY][newCordX] = bombas  + " ";
+                } else {
+                    limpiarAlrededor(arrayVisible, arraySolucion, new int[] {newCordX, cordY});
+                }
+            }
+        }
+
+        for (int m : mover) {
+            int newCordY = cordY + m;
+            if ((newCordY >= 0 && newCordY < arraySolucion.length) && arrayVisible[newCordY][cordX].equals("[]")) {
+                bombas = CantBombasAlrededor(arraySolucion, new int[] {cordX, newCordY});
+
+                if (bombas >= 1) {
+                    arrayVisible[newCordY][cordX] = bombas  + " ";
+                } else {
+                    limpiarAlrededor(arrayVisible, arraySolucion, new int[] {cordX, newCordY});
+                }
+            }
+        }
+    }
+
+    static void modificarArrayVisible(String[][] arrayVisible, int[][] arraySolucion, int[] coordSelec) {
+
+        int cordX = coordSelec[0];
+        int cordY = coordSelec[1];
+        int bombas = CantBombasAlrededor(arraySolucion, coordSelec);
+        
+
+        if (bombas > 0) {
+            arrayVisible[cordY][cordX] = bombas  + " ";
+        } else {
+            limpiarAlrededor(arrayVisible, arraySolucion, coordSelec);
+        }
     }
 
     static void mostrarArraySolucion(int[][] array) {
@@ -148,13 +191,13 @@ public class Buscaminas {
         int[] coordSelec;
         do {
             coordSelec = pedirCoordenadas(sc);
-            rangoValido = (coordSelec[0] <= 0 || coordSelec[0] > sizeX) || (coordSelec[1] <= 0 || coordSelec[1] > sizeY);
+            rangoValido = (coordSelec[0] < 0 || coordSelec[0] >= sizeX) || (coordSelec[1] < 0 || coordSelec[1] >= sizeY);
             if (rangoValido) {
                 System.out.println("Rango invalido\n");
             }
         } while (rangoValido);
 
-        modificarArrayVisible(arrayVisible, coordSelec, CantBombasAlrededor(arraySolucion, coordSelec));
+        modificarArrayVisible(arrayVisible, arraySolucion, coordSelec);
         mostrarArray(arrayVisible);
     }
 }
