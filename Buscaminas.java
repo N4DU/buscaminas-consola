@@ -167,6 +167,35 @@ public class Buscaminas {
         }
     }
 
+    static boolean comprobarGanaste(String[][] arrayVisible, int[][] arraySolucion) {
+        boolean ganaste = true;
+        
+        for (int i = 0; i < arrayVisible.length; i++) {
+            for (int j = 0; j < arrayVisible[0].length; j++) {
+
+                if (arrayVisible[i][j].equals("[]") && arraySolucion[i][j] != 1) {
+                    ganaste = false;
+                    break;
+                }
+            }
+        }
+
+        return ganaste;
+    }
+
+    static void mostrarSolucion(String[][] arrayVisible, int[][] arraySolucion) {
+
+        for (int i = 0; i < arrayVisible.length; i++) {
+            for (int j = 0; j < arrayVisible[0].length; j++) {
+
+                if (arrayVisible[i][j].equals("[]")) {
+                    
+
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
@@ -187,17 +216,29 @@ public class Buscaminas {
         mostrarArraySolucion(arraySolucion);
         System.out.print("\n\n");
 
-        boolean rangoValido;
+        boolean rangoInvalido;
         int[] coordSelec;
-        do {
-            coordSelec = pedirCoordenadas(sc);
-            rangoValido = (coordSelec[0] < 0 || coordSelec[0] >= sizeX) || (coordSelec[1] < 0 || coordSelec[1] >= sizeY);
-            if (rangoValido) {
-                System.out.println("Rango invalido\n");
-            }
-        } while (rangoValido);
+        boolean perdiste = false;
 
-        modificarArrayVisible(arrayVisible, arraySolucion, coordSelec);
-        mostrarArray(arrayVisible);
+        while (perdiste != true && comprobarGanaste(arrayVisible, arraySolucion) == false) {
+
+            do {
+                coordSelec = pedirCoordenadas(sc);
+                rangoInvalido = (coordSelec[0] < 0 || coordSelec[0] >= sizeX) || (coordSelec[1] < 0 || coordSelec[1] >= sizeY);
+                if (rangoInvalido) {
+                    System.out.println("Rango invalido\n");
+                }
+            } while (rangoInvalido);
+
+            if (arraySolucion[coordSelec[1]][coordSelec[0]] == 0) {
+
+                modificarArrayVisible(arrayVisible, arraySolucion, coordSelec);
+                mostrarArray(arrayVisible);
+            } else {
+
+                perdiste = true;
+                System.out.println("PERDISTE JEJE :3");
+            }
+        }
     }
 }
