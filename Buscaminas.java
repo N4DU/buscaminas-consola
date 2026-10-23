@@ -50,15 +50,14 @@ public class Buscaminas {
     }
 
 
-    static void llenarArraySolucion(int[][] arraySolucion) {
-        int[] rangoPorcentaje = {12, 21};
+    static void llenarArraySolucion(int[][] arraySolucion, int[] rangoPorcentaje) {
         int cantCasillas = arraySolucion.length * arraySolucion[0].length; 
         int porcentaje = numAleatorio(rangoPorcentaje);
         int cantBombas = (int)Math.round(cantCasillas * (porcentaje / 100.));
         
-        System.out.println(porcentaje);
-        System.out.println(cantCasillas);
-        System.out.println(cantBombas);
+        System.out.printf("%d%%\n", porcentaje);
+        System.out.printf("%d[]\n", cantCasillas);
+        System.out.printf("%dX\n", cantBombas);
 
         int cantBombPuestas = 0;
         while (cantBombPuestas < cantBombas) {
@@ -236,13 +235,47 @@ public class Buscaminas {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-
-        int sizeY = 3;
-        int sizeX = 3;
-        int[][] arraySolucion = new int[sizeY][sizeX];
-        String[][] arrayVisible = new String[sizeY][sizeX];
         String casilla = "[]";
         char charBomba = 'X';
+
+        System.out.println("\nBienvenido a mi buscaminas ;)");
+        boolean respInalida;
+
+
+        // Pedir size de la cuadricula
+        int sizeY;
+        int sizeX;
+        do {
+            System.out.print("Ancho cuadrícula: ");
+            sizeX = sc.nextInt();
+            System.out.print("Alto cuadrícula: ");
+            sizeY = sc.nextInt();
+
+            respInalida = sizeX <= 0 || sizeY <= 0;
+            if (respInalida) {
+                System.out.print("Respuesta inválida\n\n");
+            }
+        } while (respInalida);
+        
+
+        // Pedir nivel de dificultad
+        int[][] rangosPorcentaje = {{5, 8}, {10, 13}, {15, 17}, {20, 23}, {27, 33}};
+        int nivelElegido;
+        do {
+            System.out.print("Nivel (1-5): ");
+            nivelElegido = sc.nextInt() - 1;
+
+            respInalida = nivelElegido < 0 || nivelElegido > 4;
+            if (respInalida) {
+                System.out.print("Respuesta inválida\n\n");
+            }
+        } while (respInalida);
+
+        sc.nextLine(); // Bug, \n queda en el buffer, y cuando pido q escriban se pone enter automatico. Con esto limpio.
+
+        int[][] arraySolucion = new int[sizeY][sizeX];
+        String[][] arrayVisible = new String[sizeY][sizeX];
+
 
         // Llenar Array Visible
         for (int i = 0; i < sizeY ; i++) {
@@ -252,7 +285,7 @@ public class Buscaminas {
         }
 
 
-        llenarArraySolucion(arraySolucion);
+        llenarArraySolucion(arraySolucion, rangosPorcentaje[nivelElegido]);
 
         mostrarArrayVisible(arrayVisible, casilla);
         mostrarArraySolucion(arraySolucion);
@@ -293,5 +326,7 @@ public class Buscaminas {
         } else {
             System.out.print("¡¡¡GANASTEEEE!!! :D  muchisimas graciass por jugarr :3  atentamente N4DU");
         }
+
+        sc.close();
     }
 }
