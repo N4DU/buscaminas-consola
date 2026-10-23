@@ -283,9 +283,15 @@ public class Buscaminas {
             } else {
 
                 perdiste = true;
-                mostrarSolucion(arrayVisible, arraySolucion, casilla, charBomba);
-                System.out.println("PERDISTE JEJE :3");
+                break;
             }
+        }
+
+        mostrarSolucion(arrayVisible, arraySolucion, casilla, charBomba);
+        if (perdiste) {
+            System.out.println("PERDISTE JEJE :3");
+        } else {
+            System.out.print("¡¡¡GANASTEEEE!!! :D  muchisimas graciass por jugarr :3  atentamente N4DU");
         }
     }
 }
