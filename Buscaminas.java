@@ -193,21 +193,39 @@ public class Buscaminas {
 
 
     static boolean comprobarGanaste(String[][] arrayVisible, int[][] arraySolucion) {
-        boolean ganaste = true;
-        
+
         for (int i = 0; i < arrayVisible.length; i++) {
             for (int j = 0; j < arrayVisible[0].length; j++) {
 
                 if (!Character.isDigit(arrayVisible[i][j].charAt(0)) && arraySolucion[i][j] != 1) {
-                    ganaste = false;
-                    break;
+                    return false;
                 }
             }
         }
 
-        return ganaste;
+        return true;
     }
 
+
+    static void mostrarSolucion(String[][] arrayVisible, int[][] arraySolucion, String casilla, char charBomba) {
+        String espacios = " ".repeat(casilla.length() - 1);
+
+        for (int i = 0; i < arrayVisible.length; i++) {
+            for (int j = 0; j < arrayVisible[0].length; j++) {
+
+                if (!Character.isDigit(arrayVisible[i][j].charAt(0))) {
+                    
+                    if (arraySolucion[i][j] == 0) {
+                        arrayVisible[i][j] = Integer.toString(CantBombasAlrededor(arraySolucion, new int[] {j, i})) + espacios;
+                    } else {
+                        arrayVisible[i][j] = charBomba + espacios;
+                    }
+                }
+            }
+        }
+
+        mostrarArrayVisible(arrayVisible, casilla);
+    }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -217,6 +235,7 @@ public class Buscaminas {
         int[][] arraySolucion = new int[sizeY][sizeX];
         String[][] arrayVisible = new String[sizeY][sizeX];
         String casilla = "[]";
+        char charBomba = 'X';
 
         // Llenar Array Visible
         for (int i = 0; i < sizeY ; i++) {
@@ -248,6 +267,7 @@ public class Buscaminas {
                 }
             } while (rangoInvalido);
 
+            System.out.print("\n");
 
             if (arraySolucion[coordSelec[1]][coordSelec[0]] == 0) {
 
@@ -256,6 +276,7 @@ public class Buscaminas {
             } else {
 
                 perdiste = true;
+                mostrarSolucion(arrayVisible, arraySolucion, casilla, charBomba);
                 System.out.println("PERDISTE JEJE :3");
             }
         }
