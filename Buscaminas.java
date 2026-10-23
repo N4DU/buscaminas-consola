@@ -165,12 +165,19 @@ public class Buscaminas {
     }
 
 
-    static void modificarArrayVisible(String[][] arrayVisible, int[][] arraySolucion, int[] coordSelec) {
-
+    static void modificarArrayVisible(String[][] arrayVisible, int[][] arraySolucion, int[] coordSelec, String casilla, char charBomba) {
+        String espacios = " ".repeat(casilla.length() - 1);
         int cordX = coordSelec[0];
         int cordY = coordSelec[1];
+
+        // Poner banderita
+        if (coordSelec[2] == 1) {
+            arrayVisible[cordY][cordX] = charBomba  + espacios;
+            return;
+        }
+
+        // Mostrar numero o desplegar :P
         int bombas = CantBombasAlrededor(arraySolucion, coordSelec);
-        
 
         if (bombas > 0) {
             arrayVisible[cordY][cordX] = bombas  + " ";
@@ -269,9 +276,9 @@ public class Buscaminas {
 
             System.out.print("\n");
 
-            if (arraySolucion[coordSelec[1]][coordSelec[0]] == 0) {
+            if (arraySolucion[coordSelec[1]][coordSelec[0]] == 0 || coordSelec[2] == 1) {
 
-                modificarArrayVisible(arrayVisible, arraySolucion, coordSelec);
+                modificarArrayVisible(arrayVisible, arraySolucion, coordSelec, casilla, charBomba);
                 mostrarArrayVisible(arrayVisible, casilla);
             } else {
 
