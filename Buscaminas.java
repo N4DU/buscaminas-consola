@@ -3,42 +3,58 @@ import java.util.Scanner;
 public class Buscaminas {
     
     static int numAleatorio(int[] rango) {
-        return (int)(Math.random() * (rango[1] - rango[0]) + 1) + rango[0];
+        return (int)(Math.random() * (rango[1] - rango[0] + 1)) + rango[0];
     }
 
-    static void mostrarArray(String[][] array) {
-        int numMax_Y = array.length;
-        int numMax_X = array[0].length;
 
-        System.out.print(" ".repeat(Integer.toString(numMax_Y).length() + 1));
+    static void mostrarArrayVisible(String[][] arrayVisible, String casilla) {
+        int numMax_Y = arrayVisible.length;
+        int numMax_X = arrayVisible[0].length;
+        int digitosMax_Y = Integer.toString(numMax_Y).length();
+        int digitosMax_X = Integer.toString(numMax_X).length();
+        int spaceFinalSiempre = 1;
+        int spaceTotalMinimo = 1;
+
+
+        int digiTotal = Math.max(((digitosMax_X > casilla.length() - 1) ? digitosMax_X + 0 : casilla.length()) + spaceFinalSiempre, spaceTotalMinimo + casilla.length());
+        int spaceBetwCorchetes = Math.max(digiTotal - casilla.length(), spaceTotalMinimo);
+
+        // Coordenadas superiores.
+        System.out.print(" ".repeat(digitosMax_Y + spaceBetwCorchetes + 1));
         for (int i = 0; i < numMax_X; i++) {
 
-            int digitosMax_X = Integer.toString(numMax_X).length();
-            System.out.printf("%d%s", i+1, " ".repeat(Math.max(((digitosMax_X > 1) ? digitosMax_X + 1 : digitosMax_X + 2) - (Integer.toString(i+1).length()), 1)));
+            System.out.printf("%d%s", i+1, " ".repeat(digiTotal - (Integer.toString(i+1).length())));
         }
-        System.out.print(" (x)\n\n");
-        int spaceBetw_X = Math.max(Integer.toString(numMax_X).length() - 1, 1);
+        System.out.print("(x)\n");
+
+        // Línea divisora 
+        System.out.print(" ".repeat(digitosMax_Y + spaceBetwCorchetes));
+        for (int i = 0; i < (digiTotal * numMax_X); i++) {
+
+            System.out.print("-");
+        }
+        System.out.print("\n".repeat(spaceBetwCorchetes));
+
 
         for (int i = 0; i < numMax_Y; i++) {
 
-            System.out.printf("%d%s", i+1, " ".repeat(Integer.toString(numMax_Y).length() + 1 - (Integer.toString(i+1).length())));
+            System.out.printf("%d%s|%s", i+1, " ".repeat(digitosMax_Y - (Integer.toString(i+1).length())), " ".repeat(spaceBetwCorchetes));
 
             for (int j = 0; j < numMax_X; j++) {
-                System.out.printf("%s%s", array[i][j], " ".repeat(spaceBetw_X));
+                System.out.printf("%s%s", arrayVisible[i][j], " ".repeat(spaceBetwCorchetes));
             }
 
-            if (i < numMax_Y - 1) {
-                System.out.print("\n".repeat(spaceBetw_X + 1)); 
-            }
+            System.out.println(("\n" + " ".repeat(digitosMax_Y) + "|").repeat(spaceBetwCorchetes));
         }
-        System.out.print("\n\n(y)\n");
+        System.out.print("(y)\n\n");
     }
 
-    static void llenarArraySolucion(int[][] array) {
+
+    static void llenarArraySolucion(int[][] arraySolucion) {
         int[] rangoPorcentaje = {12, 21};
-        int cantCasillas = array.length * array[0].length; 
+        int cantCasillas = arraySolucion.length * arraySolucion[0].length; 
         int porcentaje = numAleatorio(rangoPorcentaje);
-        int cantBombas = (int)(cantCasillas * (porcentaje / 100.));
+        int cantBombas = (int)Math.round(cantCasillas * (porcentaje / 100.));
         
         System.out.println(porcentaje);
         System.out.println(cantCasillas);
@@ -46,18 +62,19 @@ public class Buscaminas {
 
         int cantBombPuestas = 0;
         while (cantBombPuestas < cantBombas) {
-            int cordY = numAleatorio(new int[] {0, array.length - 1});
-            int cordX = numAleatorio(new int[] {0, array[0].length - 1});
+            int cordY = numAleatorio(new int[] {0, arraySolucion.length - 1});
+            int cordX = numAleatorio(new int[] {0, arraySolucion[0].length - 1});
 
-            if (array[cordY][cordX] != 1) {
-                array[cordY][cordX] = 1;
+            if (arraySolucion[cordY][cordX] != 1) {
+                arraySolucion[cordY][cordX] = 1;
                 cantBombPuestas += 1;
             }
         }      
     } 
 
+
     static int[] pedirCoordenadas(Scanner sc) {
-        System.out.print("\n\n(x) (y) si/no:\n");
+        System.out.print("(x) (y) si/no:\n");
         String resp = sc.nextLine().toLowerCase();
         String respNum = "";
         int[] nums = new int[2];
@@ -86,6 +103,7 @@ public class Buscaminas {
         return new int[]{nums[0] - 1, nums[1] - 1, siNo};
     }
 
+
     static int CantBombasAlrededor(int[][] arraySolucion, int[] coordenada) {
 
         int bombasTotal = 0;
@@ -108,17 +126,19 @@ public class Buscaminas {
         return bombasTotal;
     }
 
+
     static void limpiarAlrededor(String[][] arrayVisible, int[][] arraySolucion, int[] coordSelec) {
         int cordX = coordSelec[0];
         int cordY = coordSelec[1];
-        int[] mover = {-1, 1};
+        int[] cordRevisar = {-1, 1};
         int bombas;
         
         arrayVisible[cordY][cordX] = "0 ";
 
-        for (int m : mover) {
+        for (int m : cordRevisar) {
             int newCordX = cordX + m;
-            if ((newCordX >= 0 && newCordX < arraySolucion[0].length) && arrayVisible[cordY][newCordX].equals("[]")) {
+
+            if ((newCordX >= 0 && newCordX < arraySolucion[0].length) && !Character.isDigit(arrayVisible[cordY][newCordX].charAt(0))) {
                 bombas = CantBombasAlrededor(arraySolucion, new int[] {newCordX, cordY});
 
                 if (bombas >= 1) {
@@ -129,9 +149,10 @@ public class Buscaminas {
             }
         }
 
-        for (int m : mover) {
+        for (int m : cordRevisar) {
             int newCordY = cordY + m;
-            if ((newCordY >= 0 && newCordY < arraySolucion.length) && arrayVisible[newCordY][cordX].equals("[]")) {
+
+            if ((newCordY >= 0 && newCordY < arraySolucion.length) && !Character.isDigit(arrayVisible[newCordY][cordX].charAt(0))) {
                 bombas = CantBombasAlrededor(arraySolucion, new int[] {cordX, newCordY});
 
                 if (bombas >= 1) {
@@ -142,6 +163,7 @@ public class Buscaminas {
             }
         }
     }
+
 
     static void modificarArrayVisible(String[][] arrayVisible, int[][] arraySolucion, int[] coordSelec) {
 
@@ -157,6 +179,7 @@ public class Buscaminas {
         }
     }
 
+
     static void mostrarArraySolucion(int[][] array) {
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < array[0].length; j++) {
@@ -165,7 +188,9 @@ public class Buscaminas {
             }
             System.out.print("\n");
         }
+        System.out.print("\n\n");
     }
+
 
     static boolean comprobarGanaste(String[][] arrayVisible, int[][] arraySolucion) {
         boolean ganaste = true;
@@ -173,7 +198,7 @@ public class Buscaminas {
         for (int i = 0; i < arrayVisible.length; i++) {
             for (int j = 0; j < arrayVisible[0].length; j++) {
 
-                if (arrayVisible[i][j].equals("[]") && arraySolucion[i][j] != 1) {
+                if (!Character.isDigit(arrayVisible[i][j].charAt(0)) && arraySolucion[i][j] != 1) {
                     ganaste = false;
                     break;
                 }
@@ -183,45 +208,38 @@ public class Buscaminas {
         return ganaste;
     }
 
-    static void mostrarSolucion(String[][] arrayVisible, int[][] arraySolucion) {
-
-        for (int i = 0; i < arrayVisible.length; i++) {
-            for (int j = 0; j < arrayVisible[0].length; j++) {
-
-                if (arrayVisible[i][j].equals("[]")) {
-                    
-
-                }
-            }
-        }
-    }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        int sizeY = 10;
-        int sizeX = 10;
+        int sizeY = 3;
+        int sizeX = 3;
         int[][] arraySolucion = new int[sizeY][sizeX];
-        String[][] arrayVisible = new String[sizeY][sizeX]; 
+        String[][] arrayVisible = new String[sizeY][sizeX];
+        String casilla = "[]";
 
+        // Llenar Array Visible
         for (int i = 0; i < sizeY ; i++) {
             for (int j = 0; j < sizeX; j++) {
-                arrayVisible[i][j] = "[]";
+                arrayVisible[i][j] = casilla;
             }
         }
+
+
         llenarArraySolucion(arraySolucion);
 
-        mostrarArray(arrayVisible);
-        System.out.print("\n\n");
+        mostrarArrayVisible(arrayVisible, casilla);
         mostrarArraySolucion(arraySolucion);
-        System.out.print("\n\n");
 
+
+        // Comienza el juego xDxD
         boolean rangoInvalido;
         int[] coordSelec;
         boolean perdiste = false;
 
-        while (perdiste != true && comprobarGanaste(arrayVisible, arraySolucion) == false) {
+        while (perdiste == false && !comprobarGanaste(arrayVisible, arraySolucion)) {
 
+            // Pide coordenadas y verifica q sean validas
             do {
                 coordSelec = pedirCoordenadas(sc);
                 rangoInvalido = (coordSelec[0] < 0 || coordSelec[0] >= sizeX) || (coordSelec[1] < 0 || coordSelec[1] >= sizeY);
@@ -230,10 +248,11 @@ public class Buscaminas {
                 }
             } while (rangoInvalido);
 
+
             if (arraySolucion[coordSelec[1]][coordSelec[0]] == 0) {
 
                 modificarArrayVisible(arrayVisible, arraySolucion, coordSelec);
-                mostrarArray(arrayVisible);
+                mostrarArrayVisible(arrayVisible, casilla);
             } else {
 
                 perdiste = true;
