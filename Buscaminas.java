@@ -13,11 +13,10 @@ public class Buscaminas {
         int digitosMax_Y = Integer.toString(numMax_Y).length();
         int digitosMax_X = Integer.toString(numMax_X).length();
         int spaceFinalSiempre = 1;
-        int spaceTotalMinimo = 1;
 
 
-        int digiTotal = Math.max(((digitosMax_X > casilla.length() - 1) ? digitosMax_X + 0 : casilla.length()) + spaceFinalSiempre, spaceTotalMinimo + casilla.length());
-        int spaceBetwCorchetes = Math.max(digiTotal - casilla.length(), spaceTotalMinimo);
+        int digiTotal = ((digitosMax_X > casilla.length()) ? digitosMax_X : casilla.length()) + spaceFinalSiempre;
+        int spaceBetwCorchetes = digiTotal - casilla.length();
 
         // Coordenadas superiores.
         System.out.print(" ".repeat(digitosMax_Y + spaceBetwCorchetes + 1));
@@ -33,7 +32,7 @@ public class Buscaminas {
 
             System.out.print("-");
         }
-        System.out.print("\n".repeat(spaceBetwCorchetes));
+        System.out.print("\n".repeat(Math.max(spaceBetwCorchetes, 1)));
 
 
         for (int i = 0; i < numMax_Y; i++) {
@@ -46,6 +45,7 @@ public class Buscaminas {
 
             System.out.println(("\n" + " ".repeat(digitosMax_Y) + "|").repeat(spaceBetwCorchetes));
         }
+
         System.out.print("(y)\n\n");
     }
 
