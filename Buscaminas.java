@@ -129,37 +129,32 @@ public class Buscaminas {
     static void limpiarAlrededor(String[][] arrayVisible, int[][] arraySolucion, int[] coordSelec, String casilla) {
         int cordX = coordSelec[0];
         int cordY = coordSelec[1];
-        int[] cordRevisar = {-1, 1};
+        int[] cordRevisar = {-1, 0, 1};
         int bombas;
         
         arrayVisible[cordY][cordX] = "0" + " ".repeat(casilla.length() - 1);
 
-        for (int m : cordRevisar) {
-            int newCordX = cordX + m;
+        for (int i : cordRevisar) {
+            for (int j : cordRevisar) {
 
-            if ((newCordX >= 0 && newCordX < arraySolucion[0].length) && !Character.isDigit(arrayVisible[cordY][newCordX].charAt(0))) {
-                bombas = CantBombasAlrededor(arraySolucion, new int[] {newCordX, cordY});
+                int newCordY = cordY + i;
+                int newCordX = cordX + j;
 
-                if (bombas >= 1) {
-                    arrayVisible[cordY][newCordX] = bombas  + " ".repeat(casilla.length() - 1);
-                } else {
-                    limpiarAlrededor(arrayVisible, arraySolucion, new int[] {newCordX, cordY}, casilla);
+                if ((newCordY < arraySolucion.length && newCordY >= 0) && (newCordX < arraySolucion[0].length && newCordX >= 0)) {
+                    if (!Character.isDigit(arrayVisible[newCordY][newCordX].charAt(0))) {
+                        if (!(newCordY == cordY && newCordX == cordX)) {
+
+                            bombas = CantBombasAlrededor(arraySolucion, new int[] {newCordX, newCordY});
+
+                            if (bombas >= 1) {
+                                arrayVisible[newCordY][newCordX] = bombas  + " ".repeat(casilla.length() - 1);
+                            } else {
+                                limpiarAlrededor(arrayVisible, arraySolucion, new int[] {newCordX, newCordY}, casilla);
+                            }
+                        }
+                    }
                 }
-            }
-        }
-
-        for (int m : cordRevisar) {
-            int newCordY = cordY + m;
-
-            if ((newCordY >= 0 && newCordY < arraySolucion.length) && !Character.isDigit(arrayVisible[newCordY][cordX].charAt(0))) {
-                bombas = CantBombasAlrededor(arraySolucion, new int[] {cordX, newCordY});
-
-                if (bombas >= 1) {
-                    arrayVisible[newCordY][cordX] = bombas  + " ".repeat(casilla.length() - 1);
-                } else {
-                    limpiarAlrededor(arrayVisible, arraySolucion, new int[] {cordX, newCordY}, casilla);
-                }
-            }
+            }   
         }
     }
 
