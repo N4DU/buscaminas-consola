@@ -126,13 +126,13 @@ public class Buscaminas {
     }
 
 
-    static void limpiarAlrededor(String[][] arrayVisible, int[][] arraySolucion, int[] coordSelec) {
+    static void limpiarAlrededor(String[][] arrayVisible, int[][] arraySolucion, int[] coordSelec, String casilla) {
         int cordX = coordSelec[0];
         int cordY = coordSelec[1];
         int[] cordRevisar = {-1, 1};
         int bombas;
         
-        arrayVisible[cordY][cordX] = "0 ";
+        arrayVisible[cordY][cordX] = "0" + " ".repeat(casilla.length() - 1);
 
         for (int m : cordRevisar) {
             int newCordX = cordX + m;
@@ -141,9 +141,9 @@ public class Buscaminas {
                 bombas = CantBombasAlrededor(arraySolucion, new int[] {newCordX, cordY});
 
                 if (bombas >= 1) {
-                    arrayVisible[cordY][newCordX] = bombas  + " ";
+                    arrayVisible[cordY][newCordX] = bombas  + " ".repeat(casilla.length() - 1);
                 } else {
-                    limpiarAlrededor(arrayVisible, arraySolucion, new int[] {newCordX, cordY});
+                    limpiarAlrededor(arrayVisible, arraySolucion, new int[] {newCordX, cordY}, casilla);
                 }
             }
         }
@@ -155,9 +155,9 @@ public class Buscaminas {
                 bombas = CantBombasAlrededor(arraySolucion, new int[] {cordX, newCordY});
 
                 if (bombas >= 1) {
-                    arrayVisible[newCordY][cordX] = bombas  + " ";
+                    arrayVisible[newCordY][cordX] = bombas  + " ".repeat(casilla.length() - 1);
                 } else {
-                    limpiarAlrededor(arrayVisible, arraySolucion, new int[] {cordX, newCordY});
+                    limpiarAlrededor(arrayVisible, arraySolucion, new int[] {cordX, newCordY}, casilla);
                 }
             }
         }
@@ -181,7 +181,7 @@ public class Buscaminas {
         if (bombas > 0) {
             arrayVisible[cordY][cordX] = bombas  + " ";
         } else {
-            limpiarAlrededor(arrayVisible, arraySolucion, coordSelec);
+            limpiarAlrededor(arrayVisible, arraySolucion, coordSelec, casilla);
         }
     }
 
