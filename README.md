@@ -1,11 +1,15 @@
+<div align="center">
+
 # Minesweeper Console
 
+A configurable Minesweeper game written in Java and played from the command line.
+
 [![Java](https://img.shields.io/badge/Java-100%25-orange.svg)](https://www.java.com/)
-[![License](https://img.shields.io/badge/license-not%20specified-lightgrey.svg)](https://github.com/N4DU/buscaminas-consola)
+[![License](https://img.shields.io/github/license/N4DU/buscaminas-consola)](./LICENSE)
 [![GitHub last commit](https://img.shields.io/github/last-commit/N4DU/buscaminas-consola)](https://github.com/N4DU/buscaminas-consola/commits/main)
 [![GitHub repo size](https://img.shields.io/github/repo-size/N4DU/buscaminas-consola)](https://github.com/N4DU/buscaminas-consola)
 
-A configurable Minesweeper game written in Java and played from the command line.
+</div>
 
 The program builds a square or rectangular grid, randomly places mines according to a selected difficulty level, and lets the player reveal cells or mark them with a flag. Empty areas are expanded automatically, including diagonally, until they reach numbered cells.
 
@@ -140,10 +144,12 @@ Mine placement is repeated until the rounded number of mines has been placed. Th
 
 ```text
 buscaminas-consola/
-└── Buscaminas.java
+├── Buscaminas.java
+├── LICENSE
+└── README.md
 ```
 
-The project currently consists of a single Java source file.
+The project consists of a single Java source file plus project documentation.
 
 ## How It Works
 
@@ -172,8 +178,10 @@ Please keep changes consistent with the existing console-based Java implementati
 
 ## License
 
-No license has been specified for this repository. All rights remain with the author unless a license is added.
+This project is licensed under the [MIT License](./LICENSE).
+
+Copyright (c) 2026 Pedro Nahuel Duarte Carreras (N4DU)
 
 ## Author
 
-Created by [N4DU](https://github.com/N4DU).
+Created by [Pedro Nahuel Duarte Carreras (N4DU)](https://github.com/N4DU).
