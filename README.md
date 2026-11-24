@@ -1,106 +1,179 @@
-# Buscaminas en consola
+# Minesweeper Console
 
-Juego de Buscaminas desarrollado en Java y ejecutado desde la terminal. Permite elegir el tamaño del tablero y el nivel de dificultad, colocar banderas, descubrir casillas y mostrar automáticamente las zonas vacías conectadas.
+[![Java](https://img.shields.io/badge/Java-100%25-orange.svg)](https://www.java.com/)
+[![License](https://img.shields.io/badge/license-not%20specified-lightgrey.svg)](https://github.com/N4DU/buscaminas-consola)
+[![GitHub last commit](https://img.shields.io/github/last-commit/N4DU/buscaminas-consola)](https://github.com/N4DU/buscaminas-consola/commits/main)
+[![GitHub repo size](https://img.shields.io/github/repo-size/N4DU/buscaminas-consola)](https://github.com/N4DU/buscaminas-consola)
 
-## Características
+A configurable Minesweeper game written in Java and played from the command line.
 
-- Tablero configurable mediante ancho y alto.
-- Cinco niveles de dificultad.
-- Generación aleatoria de bombas.
-- Expansión automática en las zonas sin bombas cercanas.
-- Expansión en diagonal dentro de las zonas vacías.
-- Banderas marcadas con `X`.
-- Conteo de bombas en las casillas vecinas.
-- Mensajes de victoria y derrota.
-- Visualización de la solución al finalizar la partida.
+The program builds a square or rectangular grid, randomly places mines according to a selected difficulty level, and lets the player reveal cells or mark them with a flag. Empty areas are expanded automatically, including diagonally, until they reach numbered cells.
 
-## Requisitos
+## Table of Contents
 
-- Java Development Kit (JDK) 17 o posterior recomendado.
-- Una terminal compatible con texto.
+- [Features](#features)
+- [Requirements](#requirements)
+- [Install](#install)
+- [Usage](#usage)
+- [Controls](#controls)
+- [Board Symbols](#board-symbols)
+- [Difficulty Levels](#difficulty-levels)
+- [Project Structure](#project-structure)
+- [How It Works](#how-it-works)
+- [Contributing](#contributing)
+- [License](#license)
+- [Author](#author)
 
-Para comprobar si Java está instalado:
+## Features
 
-```bash
+- Custom grid width and height
+- Five difficulty levels
+- Random mine placement
+- Numbers indicating nearby mines
+- Recursive revealing of empty areas
+- Diagonal expansion
+- Mine flags
+- Automatic victory detection
+- Minefield reveal after winning or losing
+- Coordinate labels and dynamically aligned console output
+
+## Requirements
+
+- A Java Development Kit (JDK)
+- A terminal or IDE with console input/output
+
+Check your Java installation:
+
+```sh
 java -version
 javac -version
 ```
 
-## Ejecutar el juego
+## Install
 
-Desde la carpeta que contiene `Buscaminas.java`:
+Clone the repository:
 
-```bash
+```sh
+git clone https://github.com/N4DU/buscaminas-consola.git
+cd buscaminas-consola
+```
+
+Compile the source file:
+
+```sh
 javac Buscaminas.java
+```
+
+Alternatively, open the repository in a Java IDE and run the `Buscaminas` class.
+
+## Usage
+
+Start the game:
+
+```sh
 java Buscaminas
 ```
 
-También puedes ejecutar el archivo desde tu IDE favorito importando el repositorio como proyecto Java.
+The program will request:
 
-## Cómo jugar
+1. The grid width
+2. The grid height
+3. A difficulty level from `1` to `5`
 
-Al iniciar el programa se solicitan tres datos:
+Only positive integer dimensions are accepted.
 
-1. **Ancho de la cuadrícula**.
-2. **Alto de la cuadrícula**.
-3. **Nivel de dificultad**, desde `1` hasta `5`.
-
-Los niveles corresponden a los siguientes rangos aproximados de bombas:
-
-| Nivel | Porcentaje aproximado |
-|---:|---:|
-| 1 | 5 % – 8 % |
-| 2 | 10 % – 13 % |
-| 3 | 15 % – 17 % |
-| 4 | 20 % – 23 % |
-| 5 | 27 % – 33 % |
-
-Después, introduce una coordenada horizontal y vertical. Las coordenadas usan índices mostrados por el tablero y comienzan en `1`:
+Example setup:
 
 ```text
+Ancho cuadrícula: 10
+Alto cuadrícula: 10
+Nivel (1-5): 3
+```
+
+The interface and prompts are currently in Spanish.
+
+## Controls
+
+Enter a column and row separated by any text or whitespace:
+
+```text
+(x) (y) si/no:
 3 4
 ```
 
-Este ejemplo selecciona la columna `3` y la fila `4`.
+Coordinates are shown by the board and begin at `1`.
 
-Para colocar o quitar una bandera, añade `si` al introducir las coordenadas:
+To place or toggle a mine flag, add `si` to the input:
 
 ```text
 3 4 si
 ```
 
-## Símbolos del tablero
+Without `si`, the selected cell is revealed.
 
-| Símbolo | Significado |
+## Board Symbols
+
+| Symbol | Meaning |
 |---|---|
-| `[]` | Casilla oculta |
-| `1`–`8` | Cantidad de bombas alrededor |
-| `X` | Bomba o bandera |
-| `0` | Casilla vacía sin bombas cercanas |
+| `[]` | Hidden, unrevealed cell |
+| `0` | Empty revealed cell with no adjacent mines |
+| `1`–`8` | Number of mines adjacent to the cell |
+| `X` | Mine or flagged cell |
 
-## Objetivo
+When the game ends, every unrevealed safe cell is replaced by its adjacent-mine count and every mine is shown with `X`.
 
-Descubre todas las casillas que no contienen bombas. Pierdes si descubres una bomba. Cuando terminas una partida, el programa muestra la solución completa antes de presentar el resultado.
+## Difficulty Levels
 
-## Estructura del proyecto
+The mine count is randomly selected from a percentage range. The final mine count is rounded to the nearest whole number and is based on the total number of grid cells.
+
+| Level | Approximate mine percentage |
+|---:|---:|
+| 1 | 5%–8% |
+| 2 | 10%–13% |
+| 3 | 15%–17% |
+| 4 | 20%–23% |
+| 5 | 27%–33% |
+
+Mine placement is repeated until the rounded number of mines has been placed. The same cell cannot contain more than one mine.
+
+## Project Structure
 
 ```text
 buscaminas-consola/
 └── Buscaminas.java
 ```
 
-El archivo contiene todo el programa, incluidos la configuración del tablero, la colocación aleatoria de bombas, la interfaz de consola y las reglas del juego.
+The project currently consists of a single Java source file.
 
-## Funcionamiento
+## How It Works
 
-- `llenarArraySolucion()` coloca las bombas aleatoriamente según el nivel elegido.
-- `mostrarArrayVisible()` dibuja el tablero y sus coordenadas.
-- `pedirCoordenadas()` procesa la entrada de la terminal.
-- `CantBombasAlrededor()` cuenta las bombas de las ocho casillas vecinas.
-- `limpiarAlrededor()` descubre recursivamente las zonas vacías.
-- `comprobarGanaste()` verifica si quedan casillas seguras por descubrir.
-- `mostrarSolucion()` revela las bombas y los números al finalizar.
+- `main()` initializes the scanner, grid dimensions, difficulty, visible board, and solution board.
+- `llenarArraySolucion()` selects the mine percentage and places mines randomly.
+- `mostrarArrayVisible()` renders the visible board with aligned X and Y coordinates.
+- `pedirCoordenadas()` reads the user's coordinates and optional flag command.
+- `CantBombasAlrededor()` counts mines in the eight neighboring positions.
+- `limpiarAlrededor()` recursively reveals empty connected areas and diagonal neighbors.
+- `modificarArrayVisible()` reveals a cell or places a flag.
+- `comprobarGanaste()` detects whether every safe cell is revealed.
+- `mostrarSolucion()` reveals mines and nearby-mine counts at the end of the game.
 
-## Autor
+The player wins by revealing every cell that does not contain a mine. Revealing a mine ends the game in a loss.
 
-Proyecto creado por [N4DU](https://github.com/N4DU).
+## Contributing
+
+Contributions, bug reports, and feature suggestions are welcome.
+
+1. Fork the repository.
+2. Create a focused feature or fix branch.
+3. Commit your changes with a descriptive message.
+4. Open a pull request explaining what you changed and why.
+
+Please keep changes consistent with the existing console-based Java implementation.
+
+## License
+
+No license has been specified for this repository. All rights remain with the author unless a license is added.
+
+## Author
+
+Created by [N4DU](https://github.com/N4DU).
